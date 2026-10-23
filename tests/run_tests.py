@@ -138,38 +138,38 @@ def test_chapters():
 
 # ------------------------------------------------------------------ PDF level
 def make_fixture_pdf(path: str) -> str:
+    """A coherent 4-page book: title-free, two chapters in order, known defects.
+
+    Defects planted: running head every page, page numbers, a drop cap, a
+    line-end hyphen, a scene break, and a paragraph crossing a page break.
+    """
     doc = pymupdf.open()
-    body = [
-        ("CHAPTER 1. Loomings.", 12),
-        ("Call me Ishmael. Some years ago, never mind how long pre-", 10),
-        ("cisely, having little or no money in my purse, and nothing", 10),
-        ("particular to interest me on shore, I thought I would sail", 10),
-        ("about a little and see the watery part of the world.", 10),
-        ("", 10),
-        ("* * *", 10),
-        ("CHAPTER 2. The Carpet-Bag.", 12),
-        ("I stuffed a shirt or two into my carpet-bag, tucked it under", 10),
-        ("my arm, and started for Cape Horn and the Pacific.", 10),
-    ]
     for pno in range(4):
         page = doc.new_page(width=400, height=600)
         page.insert_text((150, 40), "TESTBOOK", fontsize=9)          # running head
         page.insert_text((190, 580), str(pno + 1), fontsize=9)       # page number
-        y = 100
         if pno == 0:
-            # drop cap: big C then the rest of the word on the body line
-            page.insert_text((72, y + 12), "C", fontsize=22)
-            page.insert_text((84, y), "all me Ishmael. Some years ago, never mind how long pre-", fontsize=10)
-            y += 16
-            seq = body[2:]
+            page.insert_text((72, 110), "CHAPTER 1. Loomings.", fontsize=12)
+            page.insert_text((72, 136), "C", fontsize=22)            # drop cap (top clearly above the body line)
+            page.insert_text((84, 130), "all me Ishmael. Some years ago, never mind how long pre-", fontsize=10)
+            for i, t in enumerate([
+                "cisely, having little or no money in my purse, and nothing",
+                "particular to interest me on shore, I thought I would sail",
+                "about a little and see the watery part of the world.",
+            ]):
+                page.insert_text((72, 156 + i * 16), t, fontsize=10)
+        elif pno == 1:
+            page.insert_text((72, 100), "It is a way I have of driving off the spleen,", fontsize=10)
+            page.insert_text((72, 116), "and regulating the circulation.", fontsize=10)
+            page.insert_text((180, 150), "* * *", fontsize=10)       # scene break
+            page.insert_text((72, 190), "CHAPTER 2. The Carpet-Bag.", fontsize=12)
+            page.insert_text((72, 222), "I stuffed a shirt or two into my carpet-bag, tucked it under", fontsize=10)
+            page.insert_text((72, 238), "my arm, and started for Cape Horn and the Pacific.", fontsize=10)
+        elif pno == 2:
+            page.insert_text((72, 100), "Continued text flows across the page break without a new", fontsize=10)
+            page.insert_text((72, 116), "indent, and so must join the paragraph on the page before.", fontsize=10)
         else:
-            seq = body if pno == 1 else body[8:] + [("Continued text flows across the page break without a new indent.", 10)]
-        for text, size in seq:
-            if not text:
-                y += 12
-                continue
-            page.insert_text((72, y), text, fontsize=size)
-            y += 16 if size == 10 else 22
+            page.insert_text((72, 100), "And so this small book ends where it began.", fontsize=10)
     doc.save(path)
     doc.close()
     return path
@@ -193,7 +193,12 @@ def test_pdf_roundtrip():
     check("running head stripped", "TESTBOOK" not in all_text)
     check("page numbers stripped", not re.search(r"<p[^>]*>\s*[1-4]\s*</p>", all_text))
     check("dehyphenated across lines", "precisely" in all_text and "pre- cisely" not in all_text)
-    check("chapters in nav", rep["chapterCount"] >= 2, str(rep["chapters"]))
+    check("scene break kept", "scenebreak" in all_text)
+    check("chapters in order", rep["chapters"] == ["CHAPTER 1. Loomings.", "CHAPTER 2. The Carpet-Bag."],
+          str(rep["chapters"]))
+    check("cross-page paragraph joined",
+          "page break without a new indent, and so must join" in all_text.replace("\n", " "),
+          "cross-page join missing")
 
 
 def test_italics():
