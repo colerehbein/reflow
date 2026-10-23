@@ -1,10 +1,12 @@
 .venv/
 __pycache__/
 out/
-fixtures/*.pdf
+# big downloaded test corpora stay out (regenerable per recon/RECON.md)
+fixtures/moby*
 fixtures/*.json
 fixtures/*.txt
 fixtures/italics_test.epub
+fixtures/italic_e2e.*
 # third-party shipped artifacts (rifflepages bundle exports) stay local —
 # regenerable from recon/RECON.md evidence; not ours to relicense
 recon/scripts/files/

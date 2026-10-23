@@ -51,6 +51,10 @@ uv venv && uv pip install -e .        # or: python3 -m venv .venv && .venv/bin/p
 .venv/bin/reflow scan.pdf --json      # machine-readable report
 ```
 
+No PDF handy? `reflow fixtures/synthetic.pdf -o demo.epub` runs the demo book
+(2 chapters with planted defects: running heads, page numbers, drop cap,
+hyphenation, scene break, cross-page paragraph).
+
 Options: `--title --author --lang --dpi --workers --max-pages --no-ocr --force-ocr`.
 
 The report mirrors the reference product's conversion model
