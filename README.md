@@ -36,10 +36,18 @@ rebuilds the published behavior spec independently.
 | verse / scene breaks | yes | yes (indent-based) |
 | images kept | yes (embedded figures) | no — figures live inside the page bitmap and are not extracted |
 
-Known honest gaps vs the reference product: italic detection on scans (needs
-glyph-level slant classification), scanned-figure extraction (needs figure
-detection on the page bitmap), and footnote pop-ups (kept as footnote
-paragraphs instead).
+Known honest gaps vs the reference product:
+
+- **Footnotes: not yet separated.** Footnote text currently flows into body
+  paragraphs (roadmap: marker/rule detection + endnote or pop-up handling).
+  Do not convert footnote-heavy scholarly editions yet.
+- **Italics on scans**: tesseract's TSV carries no font style. Born-digital
+  PDFs keep inline `<i>` runs; scans lose them (~1.7 italic phrases per 1,000
+  words measured in Moby-Dick — scholarly words, foreign terms, book titles).
+- **Scanned figures**: figures live inside the page bitmap and are not
+  extracted (image-only pages such as frontispieces are kept whole).
+- **Two-column layouts** are not handled (single-column assumption).
+- Small caps not reconstructed on scans (uppercase preserved as-is).
 
 ## Use
 
