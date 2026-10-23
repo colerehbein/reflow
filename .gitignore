@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+out/
+fixtures/*.pdf
+fixtures/*.json
+fixtures/*.txt
+# third-party shipped artifacts (rifflepages bundle exports) stay local —
+# regenerable from recon/RECON.md evidence; not ours to relicense
+recon/scripts/files/
