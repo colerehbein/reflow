@@ -108,6 +108,8 @@ class Block:
     size: float = 0.0
     italic_ratio: float = 0.0
     smallcaps: bool = False
+    # inline runs (text, italic): single source for markup; text == "".join(runs)
+    runs: list[tuple[str, bool]] = field(default_factory=list)
 
 
 @dataclass

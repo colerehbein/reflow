@@ -84,12 +84,12 @@ def _block_html(block: Block, chapter: Chapter, book: Book, ch_idx: int, img_ids
     if block.kind == "image":
         return _image_html(block, chapter, ch_idx, img_ids)
     if block.kind == "verse":
-        lines = [escape(t) for t in block.text.split("\n")] if "\n" in block.text else [escape(block.text)]
-        return f"<p class=\"verse\">{'<br/>'.join(lines)}</p>", {}
+        inner = _render_runs(block.runs, block.text)
+        inner = inner.replace("\n", "<br/>")
+        return f"<p class=\"verse\">{inner}</p>", {}
     css = {"paragraph": "", "letter": "letter", "footnote": "footnote", "caption": "caption"}.get(block.kind, "")
     cls = f" class=\"{css}\"" if css else ""
-    text = _inline_html(block.text)
-    return f"<p{cls}>{text}</p>", {}
+    return f"<p{cls}>{_render_runs(block.runs, block.text)}</p>", {}
 
 
 def _image_html(block: Block, chapter: Chapter, ch_idx: int, img_ids: dict) -> tuple[str, dict]:
@@ -121,9 +121,23 @@ def flush_image_items(eb) -> None:
     _ITEMS_TO_ADD.clear()
 
 
-def _inline_html(text: str) -> str:
-    """Escape, keeping italics markers from plain text as <i> if ever present."""
-    return escape(text)
+def _render_runs(runs: list[tuple[str, bool]], fallback_text: str) -> str:
+    """Escaped XHTML with <i> around italic runs; falls back to plain text."""
+    if not runs:
+        return escape(fallback_text)
+    out: list[str] = []
+    i = 0
+    while i < len(runs):
+        flag = runs[i][1]
+        j = i
+        buf = ""
+        while j < len(runs) and runs[j][1] == flag:
+            buf += runs[j][0]
+            j += 1
+        esc = escape(buf)
+        out.append(f"<i>{esc}</i>" if flag else esc)
+        i = j
+    return "".join(out)
 
 
 def _slug(text: str) -> str:

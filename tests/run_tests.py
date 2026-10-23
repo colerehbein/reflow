@@ -16,8 +16,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 import pymupdf  # noqa: E402
 
 from reflow.layout import assemble, chapterize, strip_furniture, _join_lines, _rejoin_dropcaps  # noqa: E402
-from reflow.model import Block, Line, Page, Span  # noqa: E402
+from reflow.model import Block, Book, Chapter, FLAG_ITALIC, Line, Page, Span  # noqa: E402
 from reflow.pipeline import convert  # noqa: E402
+from reflow.write import build_epub  # noqa: E402
 
 FIX = os.path.join(os.path.dirname(__file__), "..", "fixtures")
 os.makedirs(FIX, exist_ok=True)
@@ -195,12 +196,31 @@ def test_pdf_roundtrip():
     check("chapters in nav", rep["chapterCount"] >= 2, str(rep["chapters"]))
 
 
+def test_italics():
+    print("— inline italics survive to markup")
+    l1 = Line(spans=[Span(text="Call me ", size=10), Span(text="Ishmael", size=10, flags=FLAG_ITALIC),
+                     Span(text=".", size=10)], x0=0, y0=0, x1=100, y1=12)
+    l2 = Line(spans=[Span(text="Some years ago.", size=10)], x0=0, y0=12, x1=100, y1=24)
+    blk = Block(kind="paragraph", text="", lines=[l1, l2], size=10.0)
+    from reflow.layout import _make_block
+    blk = _make_block([l1, l2], "paragraph", 10.0)
+    book = Book(title="T", chapters=[Chapter(title="C", blocks=[blk])])
+    out = os.path.join(FIX, "italics_test.epub")
+    build_epub(book, out)
+    with zipfile.ZipFile(out) as z:
+        xhtml = "".join(z.read(n).decode("utf-8") for n in z.namelist() if n.endswith(".xhtml"))
+    check("italic run renders <i>", "<i>Ishmael</i>" in xhtml, xhtml[xhtml.find("<p"):xhtml.find("<p") + 200])
+    check("roman stays outside <i>", "Call me <i>Ishmael</i>." in xhtml)
+    check("block text coherent", blk.text == "Call me Ishmael. Some years ago.", blk.text)
+
+
 if __name__ == "__main__":
     test_line_join()
     test_dropcaps()
     test_furniture()
     test_assembly()
     test_chapters()
+    test_italics()
     test_pdf_roundtrip()
     print(f"\n{PASS} passed, {FAIL} failed")
     raise SystemExit(1 if FAIL else 0)

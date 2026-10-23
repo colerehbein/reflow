@@ -1,139 +1,139 @@
 {
-  "capture_path": "/Users/colerehbein/.hermes/cache/spillover/call_fc7fbcfa0b504bc9a8685aee.txt",
-  "capture_sha256": "05c6e098777f7b5ecfb487cf2e7b94766e0e4d925c75f6f1c0dbb41160e219da",
-  "capture_kind": "page-inspection",
-  "source_evidence_id": "ev_44caf4d488fb6284372481e47a3b1923d499d57974a9e2a15384b62e8dc8f5ff",
-  "capture_completeness": {
-    "status": "policy_filtered",
-    "conditions": [
-      "attach_limited",
-      "policy_filtered"
-    ],
-    "policy_filtered_sections": [
-      "accessibility",
-      "metadata",
-      "resources",
-      "scripts",
-      "websocket_shapes",
-      "workers"
-    ],
-    "attach_limited_sections": [
-      "console_events",
-      "metadata",
-      "network_requests",
-      "websocket_connections",
-      "websocket_frames"
-    ],
-    "truncated_sections": [],
-    "unavailable_sections": [],
-    "excluded": [
-      {
-        "section": "accessibility",
-        "reason": "not_approved",
-        "count": 245
-      },
-      {
-        "section": "metadata",
-        "reason": "disallowed_origin",
-        "count": 8
-      },
-      {
-        "section": "resources",
-        "reason": "disallowed_origin",
-        "count": 8
-      },
-      {
-        "section": "resources",
-        "reason": "unsupported_url",
-        "count": 1
-      },
-      {
-        "section": "scripts",
-        "reason": "disallowed_origin",
-        "count": 4
-      },
-      {
-        "section": "websocket_shapes",
-        "reason": "not_approved",
-        "count": null
-      },
-      {
-        "section": "workers",
-        "reason": "out_of_target_scope",
-        "count": 2
-      }
-    ],
-    "dropped_events": {
-      "scripts": 0,
-      "network_requests": 0,
-      "console_events": 0,
-      "websocket_connections": 0,
-      "websocket_frames": 0,
-      "webmcp_tools": 0,
-      "timeline_events": 0,
-      "total": 0
-    }
-  },
-  "output_directory": "/Users/colerehbein/projects/reflow/recon/scripts",
-  "analysis_input": {
-    "input_path": "/Users/colerehbein/projects/reflow/recon/scripts/files",
-    "format": "directory"
-  },
-  "scripts": [
-    {
-      "source": {
-        "kind": "page-script",
-        "script_key": "scr_858420b1a722518c766539e77be45150b95072ab922e3c909166e6f06138027f",
-        "frame_id": "48B64DEFC3C43FD23A2C18575486F1B2",
-        "is_module": false,
-        "language": "JavaScript",
-        "source_map_url": null
-      },
-      "url": "https://rifflepages.com/pdf-to-xteink",
-      "content": {
-        "state": "exported",
-        "relative_path": "isolated/source-1-1f250161a2fed822788e66cc8369a756bd500d51e17e1055990a9432a99c5f33.js",
-        "layout": "isolated",
-        "layout_reason": "URL path is not an ordinary portable JavaScript module path.",
-        "sha256": "91c5173fb4b82c70685154994a3090eb2cd32c3ece4ed866ca92eef970063ca1",
-        "bytes": 399,
-        "media_type": "text/javascript",
-        "redacted": null,
-        "representation": "debugger-source-utf8"
-      }
-    },
-    {
-      "source": {
-        "kind": "page-script",
-        "script_key": "scr_d913d7a1ecbc30e9d0a252bb25e4a8765d79fab4b575c96cb6872c72c58e5dd6",
-        "frame_id": "48B64DEFC3C43FD23A2C18575486F1B2",
-        "is_module": true,
-        "language": "JavaScript",
-        "source_map_url": null
-      },
-      "url": "https://rifflepages.com/assets/index-DPa5_UvQ.js",
-      "content": {
-        "state": "exported",
-        "relative_path": "origins/e2a764fa612f6afd58359426a897b93ad8e19eb51b5fc352059ba9568578cced/assets/index-DPa5_UvQ.js",
-        "layout": "url-path",
-        "layout_reason": null,
-        "sha256": "34faf8340c1ce71036c72f9e0409408445e23b08b07f520ec1271371a0f811be",
-        "bytes": 748677,
-        "media_type": "text/javascript",
-        "redacted": null,
-        "representation": "debugger-source-utf8"
-      }
-    }
+ "capture_path": "<session-capture>/call_fc7fbcfa0b504bc9a8685aee.txt",
+ "capture_sha256": "05c6e098777f7b5ecfb487cf2e7b94766e0e4d925c75f6f1c0dbb41160e219da",
+ "capture_kind": "page-inspection",
+ "source_evidence_id": "ev_44caf4d488fb6284372481e47a3b1923d499d57974a9e2a15384b62e8dc8f5ff",
+ "capture_completeness": {
+  "status": "policy_filtered",
+  "conditions": [
+   "attach_limited",
+   "policy_filtered"
   ],
-  "limitations": [
-    "Observation starts when REA attaches; prior network and console activity is unavailable.",
-    "Raw network headers, bodies, cookies, storage values, console objects, and WebSocket payloads are never retained; explicitly requested primitive console text is retained verbatim, while payload captures retain value-free shapes.",
-    "Source maps are reported only as declarative URLs and are not fetched.",
-    "URL-less scripts and console events without an allowed source URL are excluded because their origin cannot be proven.",
-    "Only script bytes retained in this capture are exported. Sources are not refetched or executed, and a response or Debugger source does not prove execution.",
-    "Ordinary unambiguous URL paths preserve relative module layouts by origin, including case-distinct spellings. Query variants, exact path collisions, file/directory prefixes, inline sources, and unrepresentable paths are isolated. A case-distinct pair is isolated only when the destination filesystem cannot store both spellings; the record names that pair. Browser module relationships of isolated paths remain unknown.",
-    "Local JavaScript analysis does not implement browser import maps, root-relative URL resolution, remote URL loading, or browser runtime behavior. It may strip import queries and fragments; isolated variants are not canonical targets.",
-    "Source-map declarations are retained as metadata. No source maps or missing dependencies are fetched or reconstructed.",
-    "Captured response bytes are browser-decoded bytes; Debugger sources are the exposed text encoded as UTF-8. Redacted bytes are exported exactly as retained, and may no longer parse as JavaScript."
-  ]
+  "policy_filtered_sections": [
+   "accessibility",
+   "metadata",
+   "resources",
+   "scripts",
+   "websocket_shapes",
+   "workers"
+  ],
+  "attach_limited_sections": [
+   "console_events",
+   "metadata",
+   "network_requests",
+   "websocket_connections",
+   "websocket_frames"
+  ],
+  "truncated_sections": [],
+  "unavailable_sections": [],
+  "excluded": [
+   {
+    "section": "accessibility",
+    "reason": "not_approved",
+    "count": 245
+   },
+   {
+    "section": "metadata",
+    "reason": "disallowed_origin",
+    "count": 8
+   },
+   {
+    "section": "resources",
+    "reason": "disallowed_origin",
+    "count": 8
+   },
+   {
+    "section": "resources",
+    "reason": "unsupported_url",
+    "count": 1
+   },
+   {
+    "section": "scripts",
+    "reason": "disallowed_origin",
+    "count": 4
+   },
+   {
+    "section": "websocket_shapes",
+    "reason": "not_approved",
+    "count": null
+   },
+   {
+    "section": "workers",
+    "reason": "out_of_target_scope",
+    "count": 2
+   }
+  ],
+  "dropped_events": {
+   "scripts": 0,
+   "network_requests": 0,
+   "console_events": 0,
+   "websocket_connections": 0,
+   "websocket_frames": 0,
+   "webmcp_tools": 0,
+   "timeline_events": 0,
+   "total": 0
+  }
+ },
+ "output_directory": "recon/scripts",
+ "analysis_input": {
+  "input_path": "recon/scripts/files",
+  "format": "directory"
+ },
+ "scripts": [
+  {
+   "source": {
+    "kind": "page-script",
+    "script_key": "scr_858420b1a722518c766539e77be45150b95072ab922e3c909166e6f06138027f",
+    "frame_id": "48B64DEFC3C43FD23A2C18575486F1B2",
+    "is_module": false,
+    "language": "JavaScript",
+    "source_map_url": null
+   },
+   "url": "https://rifflepages.com/pdf-to-xteink",
+   "content": {
+    "state": "exported",
+    "relative_path": "isolated/source-1-1f250161a2fed822788e66cc8369a756bd500d51e17e1055990a9432a99c5f33.js",
+    "layout": "isolated",
+    "layout_reason": "URL path is not an ordinary portable JavaScript module path.",
+    "sha256": "91c5173fb4b82c70685154994a3090eb2cd32c3ece4ed866ca92eef970063ca1",
+    "bytes": 399,
+    "media_type": "text/javascript",
+    "redacted": null,
+    "representation": "debugger-source-utf8"
+   }
+  },
+  {
+   "source": {
+    "kind": "page-script",
+    "script_key": "scr_d913d7a1ecbc30e9d0a252bb25e4a8765d79fab4b575c96cb6872c72c58e5dd6",
+    "frame_id": "48B64DEFC3C43FD23A2C18575486F1B2",
+    "is_module": true,
+    "language": "JavaScript",
+    "source_map_url": null
+   },
+   "url": "https://rifflepages.com/assets/index-DPa5_UvQ.js",
+   "content": {
+    "state": "exported",
+    "relative_path": "origins/e2a764fa612f6afd58359426a897b93ad8e19eb51b5fc352059ba9568578cced/assets/index-DPa5_UvQ.js",
+    "layout": "url-path",
+    "layout_reason": null,
+    "sha256": "34faf8340c1ce71036c72f9e0409408445e23b08b07f520ec1271371a0f811be",
+    "bytes": 748677,
+    "media_type": "text/javascript",
+    "redacted": null,
+    "representation": "debugger-source-utf8"
+   }
+  }
+ ],
+ "limitations": [
+  "Observation starts when REA attaches; prior network and console activity is unavailable.",
+  "Raw network headers, bodies, cookies, storage values, console objects, and WebSocket payloads are never retained; explicitly requested primitive console text is retained verbatim, while payload captures retain value-free shapes.",
+  "Source maps are reported only as declarative URLs and are not fetched.",
+  "URL-less scripts and console events without an allowed source URL are excluded because their origin cannot be proven.",
+  "Only script bytes retained in this capture are exported. Sources are not refetched or executed, and a response or Debugger source does not prove execution.",
+  "Ordinary unambiguous URL paths preserve relative module layouts by origin, including case-distinct spellings. Query variants, exact path collisions, file/directory prefixes, inline sources, and unrepresentable paths are isolated. A case-distinct pair is isolated only when the destination filesystem cannot store both spellings; the record names that pair. Browser module relationships of isolated paths remain unknown.",
+  "Local JavaScript analysis does not implement browser import maps, root-relative URL resolution, remote URL loading, or browser runtime behavior. It may strip import queries and fragments; isolated variants are not canonical targets.",
+  "Source-map declarations are retained as metadata. No source maps or missing dependencies are fetched or reconstructed.",
+  "Captured response bytes are browser-decoded bytes; Debugger sources are the exposed text encoded as UTF-8. Redacted bytes are exported exactly as retained, and may no longer parse as JavaScript."
+ ]
 }

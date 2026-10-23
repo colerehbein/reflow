@@ -310,12 +310,52 @@ def _heading_kind(line: Line, body_size: float, prev: Line | None, page: Page, e
 
 def _make_block(lines: list[Line], kind: str, body_size: float) -> Block:
     if kind in ("verse", "letter"):
-        joined = "\n".join(l.text.strip() for l in lines if l.text.strip())
+        runs = _join_runs(lines, line_break=True)
     else:
-        joined = _join_lines([l.text for l in lines])
+        runs = _join_runs(lines, line_break=False)
+    text = "".join(t for t, _ in runs)
     italics = sum(1 for l in lines if l.has_italic) / max(1, len(lines))
     size = max((l.max_size for l in lines), default=body_size)
-    return Block(kind=kind, text=joined, lines=lines, size=size, italic_ratio=italics)
+    return Block(kind=kind, text=text, lines=lines, size=size, italic_ratio=italics, runs=runs)
+
+
+PULL_PUNCT = ".,;:!?%)]}'’”"
+OPEN_PUNCT = "([{/‘“"
+
+
+def _join_runs(lines: list[Line], line_break: bool = False) -> list[tuple[str, bool]]:
+    """Join span runs across lines, carrying italics and the hyphen rules."""
+    runs: list[tuple[str, bool]] = []
+    for line in lines:
+        chunks = [(re.sub(r"\s+", " ", s.text), s.italic) for s in line.spans if s.text.strip()]
+        if not chunks:
+            continue
+        chunks[0] = (chunks[0][0].lstrip(), chunks[0][1])
+        chunks[-1] = (chunks[-1][0].rstrip(), chunks[-1][1])
+        chunks = [(t, it) for t, it in chunks if t]
+        if not chunks:
+            continue
+        if not runs:
+            runs = chunks
+            continue
+        prev_text, prev_flag = runs[-1]
+        first_text, first_flag = chunks[0]
+        if prev_text.endswith(("-", "\u2010", "\u2011", "\u00ad")):
+            head = prev_text.rstrip("-\u2010\u2011\u00ad").rstrip()
+            keep_hyphen = not first_text[:1].islower()
+            runs[-1] = (head + ("-" if keep_hyphen else ""), prev_flag)
+            runs.extend(chunks)
+        elif line_break:
+            runs.append(("\n", False))
+            runs.extend(chunks)
+        elif first_text[:1] in PULL_PUNCT or prev_text[-1:] in OPEN_PUNCT:
+            runs.extend(chunks)  # no separator: punctuation attaches
+        else:
+            if not prev_text.endswith(" ") and not first_text.startswith(" "):
+                runs.append((" ", False))
+            runs.extend(chunks)
+    # drop empty chunks produced by edge trims
+    return [(t, it) for t, it in runs if t]
 
 
 def _join_lines(parts: list[str]) -> str:
@@ -366,6 +406,10 @@ def _rejoin_dropcaps(blocks: list[Block], body_size: float) -> list[Block]:
             tail = nxt.text
             if tail[:1].islower() or tail[:1].isupper():
                 nxt.text = letter + tail
+                if nxt.runs:
+                    nxt.runs = [(letter + nxt.runs[0][0], nxt.runs[0][1])] + nxt.runs[1:]
+                else:
+                    nxt.runs = [(letter + tail, False)]
                 out.append(nxt)
                 i += 2
                 continue

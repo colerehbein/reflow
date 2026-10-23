@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reflow"
+version = "0.1.0"
+description = "PDF to clean reflowable EPUB for small e-readers — OCR, running-head removal, paragraph joining, drop caps, chapter TOC"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Cole Rehbein" }]
+keywords = ["epub", "pdf", "ocr", "ebook", "e-reader"]
+dependencies = [
+    "pymupdf>=1.24",
+    "pytesseract>=0.3.10",
+    "pillow>=10.0",
+    "ebooklib>=0.18",
+]
+
+[project.scripts]
+reflow = "reflow.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

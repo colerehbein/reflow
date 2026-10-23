@@ -32,22 +32,26 @@ rebuilds the published behavior spec independently.
 | hyphen resolution | yes | yes |
 | drop caps rejoined | yes (size-based) | yes (shape-based, best effort) |
 | chapter TOC | yes | yes |
-| italics kept | yes (font flags) | no (OCR has no font data) |
+| italics kept | yes — inline `<i>` runs | no (OCR has no font data) |
 | verse / scene breaks | yes | yes (indent-based) |
-| images kept | yes | yes |
+| images kept | yes (embedded figures) | no — figures live inside the page bitmap and are not extracted |
 
-Known honest gap vs the reference product: italic detection on scans (needs
-glyph-level slant classification), and footnote pop-ups (kept as footnote
+Known honest gaps vs the reference product: italic detection on scans (needs
+glyph-level slant classification), scanned-figure extraction (needs figure
+detection on the page bitmap), and footnote pop-ups (kept as footnote
 paragraphs instead).
 
 ## Use
 
 ```bash
-.venv/bin/python -m reflow.cli book.pdf -o book.epub
-.venv/bin/python -m reflow.cli scan.pdf --json         # machine-readable report
+# system requirement: tesseract (macOS: brew install tesseract | Debian: apt install tesseract-ocr)
+git clone https://github.com/colerehbein/reflow && cd reflow
+uv venv && uv pip install -e .        # or: python3 -m venv .venv && .venv/bin/pip install -e .
+.venv/bin/reflow book.pdf -o book.epub
+.venv/bin/reflow scan.pdf --json      # machine-readable report
 ```
 
-Options: `--title --author --lang --dpi --workers --max-pages --no-ocr`.
+Options: `--title --author --lang --dpi --workers --max-pages --no-ocr --force-ocr`.
 
 The report mirrors the reference product's conversion model
 (`pageCount, ocrPageCount, wordCount, chapterCount, scanned, …`) so outputs are
